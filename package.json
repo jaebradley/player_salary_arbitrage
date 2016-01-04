@@ -2,7 +2,7 @@
   "name": "player_salary_arbitrage",
   "version": "1.0.0",
   "description": "",
-  "main": "App.js",
+  "main": "app.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/jaebradley/player_salary_arbitrage"
@@ -22,7 +22,8 @@
     "events": "^1.0.2",
     "flux": "^2.0.1",
     "react": "^0.12.1",
-    "express": "^4.10.6"
+    "express": "^4.10.6",
+    "jquery": "^2.1.4"
   },
   "devDependencies": {
     "jsx-loader": "^0.12.2",
