@@ -23,7 +23,8 @@
     "flux": "^2.0.1",
     "react": "^0.12.1",
     "express": "^4.10.6",
-    "jquery": "^2.1.4"
+    "jquery": "^2.1.4",
+    "q": "^1.4.1"
   },
   "devDependencies": {
     "jsx-loader": "^0.12.2",
