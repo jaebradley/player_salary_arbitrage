@@ -18955,6 +18955,7 @@
 	var PlayerSalaryTableRow = __webpack_require__(150);
 	var $ = __webpack_require__(151);
 	var Q = __webpack_require__(152);
+	var PlayerSalaryTableData = __webpack_require__(154);
 
 	var PlayerSalaryTable = React.createClass({displayName: "PlayerSalaryTable",
 		getInitialState: function() {
@@ -18964,38 +18965,13 @@
 			};
 		},
 
-		getPlayerSalaryData: function() {
-			$.ajax({
-			    type: "GET",
-			    url: "https://nba-persistence.herokuapp.com/player_salaries/?salary_min=10000",
-			    dataType: "jsonp",
-			    success: function(data) {
-			    	return data.results;
-		    	},
-			    error: function (xhr, ajaxOptions, thrownError) {
-			      alert(xhr.status);
-			      alert(thrownError);
-			    }
-			});
-		},
-
-		getData: function(url) {
-			var deferred = Q.defer();
-			$.ajax({
-			    type: "GET",
-			    url: url,
-			    dataType: "jsonp",
-			    success: function() {
-		            deferred.resolve();
-		        }
-			});
-			return deferred.promise;
-		},
 
 		returnDataResults: function(url) {
-			console.log(this.getData(url).then(function(data) {
-				return data;
-			}));
+			PlayerSalaryTableData.fetch(url).then(function(data) {
+				var deferred = Q.defer();
+				console.log(PlayerSalaryTableData.data);
+				return deferred.promise;
+			});
 		},
 
 		parsePlayerSalaryData: function() {
@@ -30433,6 +30409,56 @@
 	  delete immediateIds[id];
 	};
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(153).setImmediate, __webpack_require__(153).clearImmediate))
+
+/***/ },
+/* 154 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use es6";
+
+	var Client = __webpack_require__(155);
+
+	var PlayerSalaryTableData = {
+		data: [],
+		fetch: function(url) {
+			Client.getData(url).then(function(data) {
+
+				var deferred = Q.defer();
+				for (var i = 0; i < data.results.length; i++) {
+					this.data.push(data.results[i]);
+				}
+				return deferred.promise;
+			});
+		}
+	};
+
+	module.exports = PlayerSalaryTableData;
+
+/***/ },
+/* 155 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use es6";
+
+	var $ = __webpack_require__(151);
+	var Q = __webpack_require__(152);
+
+	var Client = {
+		getData: function(url) {
+			var deferred = Q.defer();
+			$.ajax({
+			    type: "GET",
+			    url: url,
+			    dataType: "jsonp",
+			    success: function(data) {
+		            deferred.resolve(data);
+		        }
+			});
+			return deferred.promise;
+		}
+	};
+
+	module.exports = Client;
 
 /***/ }
 /******/ ]);

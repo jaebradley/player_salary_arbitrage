@@ -2,6 +2,7 @@ var React = require('react');
 var PlayerSalaryTableRow = require('./PlayerSalaryTableRow');
 var $ = require('jquery');
 var Q = require('q');
+var PlayerSalaryTableData = require('../data/PlayerSalaryTableData');
 
 var PlayerSalaryTable = React.createClass({
 	getInitialState: function() {
@@ -11,38 +12,13 @@ var PlayerSalaryTable = React.createClass({
 		};
 	},
 
-	getPlayerSalaryData: function() {
-		$.ajax({
-		    type: "GET",
-		    url: "https://nba-persistence.herokuapp.com/player_salaries/?salary_min=10000",
-		    dataType: "jsonp",
-		    success: function(data) {
-		    	return data.results;
-	    	},
-		    error: function (xhr, ajaxOptions, thrownError) {
-		      alert(xhr.status);
-		      alert(thrownError);
-		    }
-		});
-	},
-
-	getData: function(url) {
-		var deferred = Q.defer();
-		$.ajax({
-		    type: "GET",
-		    url: url,
-		    dataType: "jsonp",
-		    success: function() {
-	            deferred.resolve();
-	        }
-		});
-		return deferred.promise;
-	},
 
 	returnDataResults: function(url) {
-		console.log(this.getData(url).then(function(data) {
-			return data;
-		}));
+		PlayerSalaryTableData.fetch(url).then(function(data) {
+			var deferred = Q.defer();
+			console.log(PlayerSalaryTableData.data);
+			return deferred.promise;
+		});
 	},
 
 	parsePlayerSalaryData: function() {
