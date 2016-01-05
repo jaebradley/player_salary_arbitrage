@@ -1,6 +1,7 @@
 var React = require('react');
 var PlayerSalaryTableRow = require('./PlayerSalaryTableRow');
 var $ = require('jquery');
+var Q = require('q');
 
 var PlayerSalaryTable = React.createClass({
 	getInitialState: function() {
@@ -9,13 +10,14 @@ var PlayerSalaryTable = React.createClass({
 			playerSalaryList: []
 		};
 	},
+
 	getPlayerSalaryData: function() {
 		$.ajax({
 		    type: "GET",
 		    url: "https://nba-persistence.herokuapp.com/player_salaries/?salary_min=10000",
 		    dataType: "jsonp",
 		    success: function(data) {
-		    	console.log(data);
+		    	return data.results;
 	    	},
 		    error: function (xhr, ajaxOptions, thrownError) {
 		      alert(xhr.status);
@@ -24,9 +26,45 @@ var PlayerSalaryTable = React.createClass({
 		});
 	},
 
+	getData: function(url) {
+		var deferred = Q.defer();
+		$.ajax({
+		    type: "GET",
+		    url: url,
+		    dataType: "jsonp",
+		    success: function() {
+	            deferred.resolve();
+	        }
+		});
+		return deferred.promise;
+	},
+
+	returnDataResults: function(url) {
+		console.log(this.getData(url).then(function(data) {
+			return data;
+		}));
+	},
+
+	parsePlayerSalaryData: function() {
+		var parsedPlayerSalaryData = [];
+		playerSalaryData = this.returnDataResults("https://nba-persistence.herokuapp.com/player_salaries/?salary_min=10000");
+		for (var i = 0; i < playerSalaryData.length; i++) {
+			var playerData = returnDataResults(playerSalaryData[i].player);
+			var gameData = returnDataResults(playerSalaryData[i].game);
+			var salary = playerSalaryData[i].salary;
+			var siteData = playerSalaryData[i].site;
+			var firstName = playerData[0].first_name;
+			var lastName = playerData[0].last_name;
+			var gameStartTime = gameData[0].start_time;
+			var key = firstName + "|" + lastName + "|" + gameStartTime;
+			parsedPlayerSalaryData[key] = salary;
+		}
+		return parsedPlayerSalaryData;
+	},
+
 
 	render: function() {
-		this.getPlayerSalaryData();
+		playerSalaryData = this.parsePlayerSalaryData();
 		var playerSalaryList = [];
 		this.props.playerSalaryList.forEach(function(playerSalary) {
 			playerSalaryList.push(
