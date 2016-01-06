@@ -2,7 +2,7 @@ var React = require('react');
 var PlayerSalaryTableRow = require('./PlayerSalaryTableRow');
 var $ = require('jquery');
 var Q = require('q');
-var PlayerSalaryTableData = require('../data/PlayerSalaryTableData');
+var Client = require('../data/Client');
 
 var PlayerSalaryTable = React.createClass({
 	getInitialState: function() {
@@ -13,54 +13,84 @@ var PlayerSalaryTable = React.createClass({
 	},
 
 
-	returnDataResults: function(url) {
-		PlayerSalaryTableData.fetch(url).then(function(data) {
-			var deferred = Q.defer();
-			console.log(PlayerSalaryTableData.data);
-			return deferred.promise;
-		});
-	},
 
-	parsePlayerSalaryData: function() {
+	parsePlayerSalaryData: function(data) {
 		var parsedPlayerSalaryData = [];
-		playerSalaryData = this.returnDataResults("https://nba-persistence.herokuapp.com/player_salaries/?salary_min=10000");
-		for (var i = 0; i < playerSalaryData.length; i++) {
-			var playerData = returnDataResults(playerSalaryData[i].player);
-			var gameData = returnDataResults(playerSalaryData[i].game);
-			var salary = playerSalaryData[i].salary;
-			var siteData = playerSalaryData[i].site;
-			var firstName = playerData[0].first_name;
-			var lastName = playerData[0].last_name;
+		for (var i = 0; i < data.results.length; i++) {
+			var playerData = data.results[i].player;
+			var gameData = data.results[i].game;
+			var salary = data.results[i].salary;
+			var siteData = data.results[i].site;
+			// var firstName = playerData[0].first_name;
+			// var lastName = playerData[0].last_name;
 			var gameStartTime = gameData[0].start_time;
-			var key = firstName + "|" + lastName + "|" + gameStartTime;
+			var key = playerData + "|" + gameData;
 			parsedPlayerSalaryData[key] = salary;
 		}
 		return parsedPlayerSalaryData;
 	},
 
+	// componentWillMount() {
+	// 	var that = this;
+	// 	Client.getData("https://nba-persistence.herokuapp.com/player_salaries/?salary_min=10000").then(function(data) {
+	// 		var results = function(data) {
+	// 			var parsedPlayerSalaryData = [];
+	// 			for (var i = 0; i < data.results.length; i++) {
+	// 				var playerData = data.results[i].player;
+	// 				var gameData = data.results[i].game;
+	// 				var salary = data.results[i].salary;
+	// 				var siteData = data.results[i].site;
+	// 				// var firstName = playerData[0].first_name;
+	// 				// var lastName = playerData[0].last_name;
+	// 				var gameStartTime = gameData[0].start_time;
+	// 				var key = playerData + "|" + gameData;
+	// 				parsedPlayerSalaryData[key] = salary;
+	// 			}
+	// 			return parsedPlayerSalaryData;
+	// 		};
+
+	// 		that.setState({playerSalaryList: results(data)});
+	// 	});
+		
+	// },
+
+	componentDidMount: function() {
+	    $.ajax({
+	      url: "https://nba-persistence.herokuapp.com/player_salaries/?salary_min=10000",
+	      dataType: 'jsonp',
+	      cache: false,
+	      success: function(data) {
+	        this.setState({playerSalaryList: data.results});
+	      }.bind(this),
+	      error: function(xhr, status, err) {
+	        console.error(this.props.url, status, err.toString());
+	      }.bind(this)
+	    });
+	  },
+
 
 	render: function() {
-		playerSalaryData = this.parsePlayerSalaryData();
+		console.log(this.state.playerSalaryList);
 		var playerSalaryList = [];
-		this.props.playerSalaryList.forEach(function(playerSalary) {
+		for (var i = 0; i < this.state.playerSalaryList.length; i++) {
 			playerSalaryList.push(
 				<PlayerSalaryTableRow 
-					name={playerSalary.name} 
-					teamAbbreviation={playerSalary.teamAbbreviation} 
-					gameStartTime={playerSalary.gameStartTime} 
-					draftkingsSalary={playerSalary.draftkingsSalary} 
-					fanduelSalary={playerSalary.fanduelSalary} 
-					difference={playerSalary.difference} />
+					name={"foo"} 
+					teamAbbreviation={"foo"} 
+					gameStartTime={"foo"} 
+					draftkingsSalary={"foo"} 
+					fanduelSalary={"foo"} 
+					difference={"foo"}  />
 			);
-		}.bind(this));
+		};
 
 		return (
-			<table className="playerSalaryList">
-				<caption>{this.props.caption}</caption>
-				<tbody>
-					{playerSalaryList}
-				</tbody>
-			</table>
+				<table className="playerSalaryList">
+					<caption>{this.props.caption}</caption>
+					<tbody>
+						{playerSalaryList}
+					</tbody>
+				</table>
 		);
 	}
 });
