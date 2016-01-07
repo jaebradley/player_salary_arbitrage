@@ -2,19 +2,24 @@
 
 var $ = require('jquery');
 var Q = require('q');
+var request = require('superagent');
+var Promise = require('es6-promise').Promise;
+var jsonp = require('superagent-jsonp');
 
 var Client = {
 	getData: function(url) {
-		var deferred = Q.defer();
-		$.ajax({
-		    type: "GET",
-		    url: url,
-		    dataType: "jsonp",
-		    success: function(data) {
-	            deferred.resolve(data);
-	        }
+		return new Promise(function (resolve, reject) {
+			request
+				.get(url)
+				.use(jsonp)
+				.end(function (err, res) {
+					if (res.status === 404) {
+						reject();
+					} else {
+						resolve(res.body.results);
+					}
+			});
 		});
-		return deferred.promise;
 	}
 };
 

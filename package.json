@@ -24,7 +24,13 @@
     "react": "^0.12.1",
     "express": "^4.10.6",
     "jquery": "^2.1.4",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "es6-promise": "^2.0.1",
+    "superagent": "^0.21.0",
+    "object-assign": "^2.0.0",
+    "ecstatic": "^0.5.8",
+    "routes": "^2.0.0",
+    "superagent-jsonp": "^0.0.6"
   },
   "devDependencies": {
     "jsx-loader": "^0.12.2",
