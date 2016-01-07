@@ -25,6 +25,7 @@ var PlayerSalaryTableRow = React.createClass({
 				<td>{this.props.draftKingsSalary}</td>
 				<td>{this.props.fanDuelSalary}</td>
 				<td>{this.props.draftKingsSalary - this.props.fanDuelSalary}</td>
+				<td>{this.props.fanDuelSalary - this.props.draftKingsSalary}</td>
 			</tr>
 		);
 	}

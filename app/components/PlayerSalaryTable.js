@@ -39,8 +39,8 @@ var PlayerSalaryTable = React.createClass({
 				name={playerSalary.player.first_name} 
 				teamAbbreviation={playerSalary.team.abbrevation} 
 				gameStartTime={playerSalary.game.start_time} 
-				draftkingsSalary={playerSalary.salary} 
-				fanduelSalary={"foo"} 
+				draftKingsSalary={playerSalary.salary} 
+				fanDuelSalary={0} 
 			/>
 		);
 	},
