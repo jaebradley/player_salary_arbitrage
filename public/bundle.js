@@ -20516,15 +20516,14 @@
 					name: playerSalary.player.first_name, 
 					teamAbbreviation: playerSalary.team.abbrevation, 
 					gameStartTime: playerSalary.game.start_time, 
-					draftkingsSalary: playerSalary.salary, 
-					fanduelSalary: "foo"}
+					draftKingsSalary: playerSalary.salary, 
+					fanDuelSalary: 0}
 				)
 			);
 		},
 
 
 		render: function() {
-			console.log(this.state.playerSalaryList);
 			var playerSalaryList = [];
 			if (this.state.playerSalaryList.length > 0) {
 				this.state.playerSalaryList.forEach(function(playerSalary) {
@@ -20534,14 +20533,12 @@
 							name: playerSalary.player.first_name, 
 							teamAbbreviation: playerSalary.player.team.abbreviation, 
 							gameStartTime: playerSalary.game.start_time, 
-							draftkingsSalary: playerSalary.salary, 
-							fanduelSalary: "foo", 
-							difference: "foo"}
+							draftKingsSalary: playerSalary.salary, 
+							fanDuelSalary: 0}
 						)
 					);
 				}.bind(this));
 			}
-			console.log(playerSalaryList);
 			return (
 					React.createElement("table", {className: "playerSalaryList"}, 
 						React.createElement("caption", null, this.props.caption), 
@@ -20564,27 +20561,25 @@
 	var PlayerSalaryTableRow = React.createClass({displayName: "PlayerSalaryTableRow",
 		render: function() {
 			var styles = {
-				removeTask: {
-					fontSize: 20,
-					float: "left",
-					position: "absolute",
-					top: 12,
-					left: 6,
-					cursor: "pointer",
-					color: "rgb(222, 79, 79)"
+				tr: {
+					border: '1px solid black'
 				},
-				todoTask: {
-					paddingLeft: 20,
-					fontSize: 17
+				td: {
+					border: '1px solid black'
 				}
 			};
+			var draftKingsDifference = this.props.draftKingsSalary - this.props.fanDuelSalary;
+			var fanDuelDifference = this.props.fanDuelSalary - this.props.draftKingsSalary;
+			
 			return (
-				React.createElement("tr", {className: "list-group-item"}, 
-					React.createElement("td", null, this.props.name), 
+				React.createElement("tr", {style: styles.tr}, 
+					React.createElement("td", {style: styles.td}, this.props.name), 
 					React.createElement("td", null, this.props.teamAbbreviation), 
 					React.createElement("td", null, this.props.gameStartTime), 
-					React.createElement("td", null, this.props.draftkingsSalary), 
-					React.createElement("td", null, this.props.fanduelSalary)
+					React.createElement("td", null, this.props.draftKingsSalary), 
+					React.createElement("td", null, this.props.fanDuelSalary), 
+					React.createElement("td", null, draftKingsDifference), 
+					React.createElement("td", null, fanDuelDifference)
 				)
 			);
 		}

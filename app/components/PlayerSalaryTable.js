@@ -47,7 +47,6 @@ var PlayerSalaryTable = React.createClass({
 
 
 	render: function() {
-		console.log(this.state.playerSalaryList);
 		var playerSalaryList = [];
 		if (this.state.playerSalaryList.length > 0) {
 			this.state.playerSalaryList.forEach(function(playerSalary) {
@@ -57,14 +56,12 @@ var PlayerSalaryTable = React.createClass({
 						name={playerSalary.player.first_name} 
 						teamAbbreviation={playerSalary.player.team.abbreviation} 
 						gameStartTime={playerSalary.game.start_time} 
-						draftkingsSalary={playerSalary.salary} 
-						fanduelSalary={"foo"} 
-						difference={"foo"}  
+						draftKingsSalary={playerSalary.salary} 
+						fanDuelSalary={0} 
 					/>
 				);
 			}.bind(this));
 		}
-		console.log(playerSalaryList);
 		return (
 				<table className="playerSalaryList">
 					<caption>{this.props.caption}</caption>
