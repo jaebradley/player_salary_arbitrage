@@ -12,6 +12,8 @@ var _playerSalaries = [];
  * Set the values for playerSalaries that will be used
  * with components.
  */
+
+ 
 function setPlayerSalaries (playerSalaries) {
   _playerSalaries = playerSalaries;
 }

@@ -18,6 +18,9 @@ var PlayerSalaryTable = React.createClass({
 
 	componentDidMount: function () {
 		ActionCreator.getPlayerSalaries();
+		this.setState({
+		  playerSalaryList: Store.getPlayerSalaries()
+		});
 	},
 
 	componentWillUnmount: function () {
@@ -30,21 +33,38 @@ var PlayerSalaryTable = React.createClass({
 		});
 	},
 
+	returnPlayerSalaryTableRow: function(playerSalary) {
+		return (
+			<PlayerSalaryTableRow 
+				name={playerSalary.player.first_name} 
+				teamAbbreviation={playerSalary.team.abbrevation} 
+				gameStartTime={playerSalary.game.start_time} 
+				draftkingsSalary={playerSalary.salary} 
+				fanduelSalary={"foo"} 
+			/>
+		);
+	},
+
 
 	render: function() {
+		console.log(this.state.playerSalaryList);
 		var playerSalaryList = [];
-		for (var i = 0; i < this.state.playerSalaryList.length; i++) {
-			playerSalaryList.push(
-				<PlayerSalaryTableRow 
-					name={"foo"} 
-					teamAbbreviation={"foo"} 
-					gameStartTime={"foo"} 
-					draftkingsSalary={"foo"} 
-					fanduelSalary={"foo"} 
-					difference={"foo"}  />
-			);
-		};
-
+		if (this.state.playerSalaryList.length > 0) {
+			this.state.playerSalaryList.forEach(function(playerSalary) {
+				console.log(playerSalary);
+				playerSalaryList.push(
+					<PlayerSalaryTableRow 
+						name={playerSalary.player.first_name} 
+						teamAbbreviation={playerSalary.player.team.abbreviation} 
+						gameStartTime={playerSalary.game.start_time} 
+						draftkingsSalary={playerSalary.salary} 
+						fanduelSalary={"foo"} 
+						difference={"foo"}  
+					/>
+				);
+			}.bind(this));
+		}
+		console.log(playerSalaryList);
 		return (
 				<table className="playerSalaryList">
 					<caption>{this.props.caption}</caption>
