@@ -10,21 +10,27 @@ var Table = Reactable.Table;
 var Thead = Reactable.Thead;
 var Th = Reactable.Th;
 var Td = Reactable.Td;
+var Moment = require('moment');
+var DatePicker = require('react-datepicker');
 
 var PlayerSalaryTable = React.createClass({
 	getInitialState: function() {
 		return {
-			playerSalaryList: []
+			playerSalaryList: [],
+			estDate: Moment.utc().utcOffset('-0500').startOf('day')
 		};
 	},
 
 	componentWillMount: function () {
-	    Store.addChangeListener(this._onChange);
+	    Store.addChangeListener(this.handleChange);
 	},
 
 	componentDidMount: function () {
+		var estDateStartUnixTimestamp = this.state.estDate.unix();
 		ActionCreator.getPlayerSalaries({
-			salary_min: 8000
+			salary_min: 8000,
+			start_unix_timestamp: estDateStartUnixTimestamp,
+			end_unix_timestamp: estDateStartUnixTimestamp + 86400
 		});
 		this.setState({
 		  playerSalaryList: Store.getPlayerSalaries()
@@ -32,12 +38,22 @@ var PlayerSalaryTable = React.createClass({
 	},
 
 	componentWillUnmount: function () {
-		Store.removeChangeListener(this._onChange);
+		Store.removeChangeListener(this.handleChange);
 	},
 
-	_onChange: function () {
+	handleChange: function (event) {
+		var newEstDate = Moment(event.target.selected).utc().utcOffset('-0500').startOf('day');
+		var estDateStartUnixTimestamp = newEstDate.unix();
+
+		ActionCreator.getPlayerSalaries({
+			salary_min: 8000,
+			start_unix_timestamp: estDateStartUnixTimestamp,
+			end_unix_timestamp: estDateStartUnixTimestamp + 86400
+		});
+
 		this.setState({
-		  playerSalaryList: Store.getPlayerSalaries()
+		  playerSalaryList: Store.getPlayerSalaries(),
+		  estDate: newEstDate
 		});
 	},
 
@@ -89,26 +105,29 @@ var PlayerSalaryTable = React.createClass({
 				playerSalaryList.push(data);
 			});		
 		}
-		var data = {playerSalaryList};
-		console.log(playerSalaryList);
-		console.log(this.state.playerSalaryList);
 
 		return (
-			<Table 
-				className="table" 
-				data={playerSalaryList} 
-				sortable={[
-					"Name",
-					"Team",
-					"Game Start Time",
-					"DraftKings Salary",
-					"FanDuel Salary",
-					"Difference (DK - FD)"
-				]}
-				filterable={[
-					"Name"
-				]}
-			/>
+			<div>
+				<DatePicker
+				    selected={this.state.estDate}
+				    onChange={this.handleChange} 
+			    />
+				<Table 
+					className="table" 
+					data={playerSalaryList} 
+					sortable={[
+						"Name",
+						"Team",
+						"Game Start Time",
+						"DraftKings Salary",
+						"FanDuel Salary",
+						"Difference (DK - FD)"
+					]}
+					filterable={[
+						"Name"
+					]}
+				/>
+			</div>
 		);
 	}
 });

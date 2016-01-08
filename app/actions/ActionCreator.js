@@ -5,6 +5,7 @@ var Client = require('../data/Client');
 var ActionCreator = {
 	getPlayerSalaries: function (data) {
 		var url = this.appendDataToUrl('https://nba-persistence.herokuapp.com/player_salaries/', data);
+		console.log(url);
 		Client
 			.getAllData(url)
 			.then(function (playerSalaries) {
