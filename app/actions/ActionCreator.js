@@ -5,7 +5,7 @@ var Client = require('../data/Client');
 var ActionCreator = {
 	getPlayerSalaries: function () {
 		Client
-			.getData('https://nba-persistence.herokuapp.com/player_salaries/?salary_min=10000')
+			.getAllData('https://nba-persistence.herokuapp.com/player_salaries/?salary_min=8000')
 			.then(function (playerSalaries) {
 				Dispatcher.handleViewAction({
 					actionType: ActionConstants.GOT_DATA,

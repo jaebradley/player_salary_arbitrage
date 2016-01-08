@@ -12,7 +12,8 @@
   "scripts": {
     "start": "npm run build",
     "build": "./node_modules/.bin/webpack",
-    "dev-server": "node_modules/.bin/http-server -p 3000 public/"
+    "dev-server": "node_modules/.bin/http-server -p 3000 public/",
+    "watch:start": "watch 'npm start'"
   },
   "engines": {
     "node": "4.2.2"
@@ -21,7 +22,7 @@
     "axios": "^0.4.2",
     "events": "^1.0.2",
     "flux": "^2.0.1",
-    "react": "^0.13",
+    "react": "latest",
     "express": "^4.10.6",
     "jquery": "^2.1.4",
     "q": "^1.4.1",
@@ -30,11 +31,16 @@
     "object-assign": "^2.0.0",
     "ecstatic": "^0.5.8",
     "routes": "^2.0.0",
-    "superagent-jsonp": "^0.0.6"
+    "superagent-jsonp": "^0.0.6",
+    "hashmap": "^2.0.4",
+    "reactable": "^0.12.1",
+    "react-dom": "latest"
   },
   "devDependencies": {
     "jsx-loader": "^0.12.2",
     "webpack": "^1.5.3",
-    "http-server": "^0.8.0"
+    "http-server": "^0.8.0",
+    "mocha": "latest",
+    "watch": "latest"
   }
 }

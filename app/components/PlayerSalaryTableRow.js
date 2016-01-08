@@ -1,28 +1,21 @@
 var React = require('react');
+var Reactable = require('reactable');
+var Td = Reactable.Td;
+var Tr = Reactable.Tr;
 
 var PlayerSalaryTableRow = React.createClass({
 	render: function() {
-		var styles = {
-			tr: {
-				border: '1px solid black'
-			},
-			td: {
-				border: '1px solid black'
-			}
-		};
 		var draftKingsDifference = this.props.draftKingsSalary - this.props.fanDuelSalary;
-		var fanDuelDifference = this.props.fanDuelSalary - this.props.draftKingsSalary;
 		
 		return (
-			<tr style={styles.tr} >
-				<td style={styles.td}>{this.props.name}</td>
-				<td>{this.props.teamAbbreviation}</td>
-				<td>{this.props.gameStartTime}</td>
-				<td>{this.props.draftKingsSalary}</td>
-				<td>{this.props.fanDuelSalary}</td>
-				<td>{draftKingsDifference}</td>
-				<td>{fanDuelDifference}</td>
-			</tr>
+			<Tr>
+				<Td column="name">{this.props.name}</Td>
+				<Td column="team">{this.props.teamAbbreviation}</Td>
+				<Td column="startTime">{this.props.gameStartTime}</Td>
+				<Td column="draftKingsSalary">{this.props.draftKingsSalary}</Td>
+				<Td column="fanDuelSalary">{this.props.fanDuelSalary}</Td>
+				<Td column="difference">{draftKingsDifference}</Td>
+			</Tr>
 		);
 	}
 });

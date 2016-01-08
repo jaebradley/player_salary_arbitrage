@@ -1,3 +1,4 @@
+var ReactDOM = require('react-dom');
 var React = require('react');
 var PlayerSalaryTableContainer = require('./components/PlayerSalaryTableContainer');
 
@@ -5,15 +6,13 @@ var App = React.createClass({
   render: function(){
     return (
       <div className="container">
-        <div className="row">
-          <PlayerSalaryTableContainer />
-        </div>
+        <PlayerSalaryTableContainer />
       </div>
     )
   }
 });
 
-React.render(
+ReactDOM.render(
   <App />,
   document.getElementById('app')
 )

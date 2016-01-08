@@ -4,6 +4,12 @@ var React = require('react');
 var PlayerSalaryTableRow = require('./PlayerSalaryTableRow');
 var Store = require('../stores/Store');
 var ActionCreator = require('../actions/ActionCreator');
+var HashMap = require('hashmap');
+var Reactable = require('reactable');
+var Table = Reactable.Table;
+var Thead = Reactable.Thead;
+var Th = Reactable.Th;
+var Td = Reactable.Td;
 
 var PlayerSalaryTable = React.createClass({
 	getInitialState: function() {
@@ -33,42 +39,74 @@ var PlayerSalaryTable = React.createClass({
 		});
 	},
 
-	returnPlayerSalaryTableRow: function(playerSalary) {
-		return (
-			<PlayerSalaryTableRow 
-				name={playerSalary.player.first_name} 
-				teamAbbreviation={playerSalary.team.abbrevation} 
-				gameStartTime={playerSalary.game.start_time} 
-				draftKingsSalary={playerSalary.salary} 
-				fanDuelSalary={0} 
-			/>
-		);
+	returnPlayerSalaryMap: function(playerSalaries) {
+		var playerSalaryMap = new HashMap();
+		playerSalaries.forEach(function(playerSalary) {
+			var key = playerSalary.player.first_name + "|" + playerSalary.player.last_name + "|" + playerSalary.game.start_time + "|" + playerSalary.player.team.abbreviation;
+			if (!playerSalaryMap.has(key)) {
+				playerSalaryMap.set(
+					key,
+					{
+						draftKingsSalary: null,
+						fanDuelSalary: null
+					}
+				);
+			};
+			var value = playerSalaryMap.get(key);
+			switch(playerSalary.site.name) {
+				case "DraftKings":
+					value.draftKingsSalary = playerSalary.salary;
+					break;
+				case "FanDuel":
+					value.fanDuelSalary = playerSalary.salary;
+					break;
+				default:
+					return true;
+			}
+			playerSalaryMap.set(key, value);
+		});
+		return playerSalaryMap;
 	},
 
 
 	render: function() {
 		var playerSalaryList = [];
 		if (this.state.playerSalaryList.length > 0) {
-			this.state.playerSalaryList.forEach(function(playerSalary) {
-				console.log(playerSalary);
-				playerSalaryList.push(
-					<PlayerSalaryTableRow 
-						name={playerSalary.player.first_name} 
-						teamAbbreviation={playerSalary.player.team.abbreviation} 
-						gameStartTime={playerSalary.game.start_time} 
-						draftKingsSalary={playerSalary.salary} 
-						fanDuelSalary={0} 
-					/>
-				);
-			}.bind(this));
+			var playerSalaryMap = this.returnPlayerSalaryMap(this.state.playerSalaryList);
+			playerSalaryMap.forEach(function(value, key) {
+				keyValues = key.split("|");
+				var data = 
+				{
+					"Name": keyValues[0] + " " + keyValues[1],
+					"Team": keyValues[3],
+					"Game Start Time": keyValues[2],
+					"DraftKings Salary": value.draftKingsSalary,
+					"FanDuel Salary": value.fanDuelSalary,
+					"Difference (DK - FD)": value.draftKingsSalary - value.fanDuelSalary
+				};
+				playerSalaryList.push(data);
+			});		
 		}
+		var data = {playerSalaryList};
+		console.log(playerSalaryList);
+		console.log(this.state.playerSalaryList);
+
 		return (
-				<table className="playerSalaryList">
-					<caption>{this.props.caption}</caption>
-					<tbody>
-						{playerSalaryList}
-					</tbody>
-				</table>
+			<Table 
+				className="table" 
+				data={playerSalaryList} 
+				sortable={[
+					"Name",
+					"Team",
+					"Game Start Time",
+					"DraftKings Salary",
+					"FanDuel Salary",
+					"Difference (DK - FD)"
+				]}
+				filterable={[
+					"Name"
+				]}
+			/>
 		);
 	}
 });
