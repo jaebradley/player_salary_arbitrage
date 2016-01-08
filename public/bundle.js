@@ -19718,7 +19718,9 @@
 		},
 
 		componentDidMount: function () {
-			ActionCreator.getPlayerSalaries();
+			ActionCreator.getPlayerSalaries({
+				salary_min: 8000
+			});
 			this.setState({
 			  playerSalaryList: Store.getPlayerSalaries()
 			});
@@ -22150,15 +22152,23 @@
 	var Client = __webpack_require__(187);
 
 	var ActionCreator = {
-		getPlayerSalaries: function () {
+		getPlayerSalaries: function (data) {
+			var url = this.appendDataToUrl('https://nba-persistence.herokuapp.com/player_salaries/', data);
 			Client
-				.getAllData('https://nba-persistence.herokuapp.com/player_salaries/?salary_min=8000')
+				.getAllData(url)
 				.then(function (playerSalaries) {
 					Dispatcher.handleViewAction({
 						actionType: ActionConstants.GOT_DATA,
 						playerSalaries: playerSalaries
 					});
 				});
+		},
+		appendDataToUrl: function(url, data) {
+			var paramterizedUrl = url + "?";
+			for (var key in data) {
+				paramterizedUrl = paramterizedUrl + key + "=" + data[key] + "&";
+			}
+			return paramterizedUrl;
 		}
 	};
 
@@ -22203,7 +22213,8 @@
 					return this.getAllData(results.next);
 				}
 			}.bind(this));
-		}
+		},
+		
 	};
 
 	module.exports = Client;

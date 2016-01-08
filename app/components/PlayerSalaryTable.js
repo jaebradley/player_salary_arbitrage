@@ -23,7 +23,9 @@ var PlayerSalaryTable = React.createClass({
 	},
 
 	componentDidMount: function () {
-		ActionCreator.getPlayerSalaries();
+		ActionCreator.getPlayerSalaries({
+			salary_min: 8000
+		});
 		this.setState({
 		  playerSalaryList: Store.getPlayerSalaries()
 		});

@@ -33,7 +33,8 @@ var Client = {
 				return this.getAllData(results.next);
 			}
 		}.bind(this));
-	}
+	},
+	
 };
 
 module.exports = Client;
