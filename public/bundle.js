@@ -19664,23 +19664,35 @@
 
 	var React = __webpack_require__(147);
 	var PlayerSalaryTable = __webpack_require__(160);
+	var Moment = __webpack_require__(200);
+	var DatePicker = __webpack_require__(298);
 
 	var PlayerSalaryTableContainer = React.createClass({displayName: "PlayerSalaryTableContainer",
 		getInitialState: function() {
 
 			return {
-				playerSalaryList: [],
-				caption: "",
-				playerSalaryDataSource: "http:localhost:8000/player_salaries/?salary_min=10000"
+				utcDate: Moment.utc()
 			};
 		},
+
+		handleDateSelection: function (date) {
+
+			this.setState({
+			  utcDate: date
+			});
+		},
+
 		render: function() {
 
 			return (
-				React.createElement("div", {className: "col-sm-6 col-md-offset-3"}, 
-					React.createElement("div", {className: "col-sm-12"}, 
-						React.createElement("h3", {className: "text-center"}, "Player Salary Differential"), 
-						React.createElement(PlayerSalaryTable, {playerSalaryList: this.state.playerSalaryList, caption: this.state.playerSalaryList, playerSalaryDataSource: this.state.playerSalaryDataSource})
+				React.createElement("div", null, 
+					React.createElement("h3", {className: "text-center"}, "Player Salary Differential"), 
+					React.createElement(DatePicker, {
+						selected: this.state.utcDate, 
+						onChange: this.handleDateSelection}
+					), 
+					React.createElement(PlayerSalaryTable, {
+						utcDate: this.state.utcDate}
 					)
 				)
 			);
@@ -19705,14 +19717,11 @@
 	var Thead = Reactable.Thead;
 	var Th = Reactable.Th;
 	var Td = Reactable.Td;
-	var Moment = __webpack_require__(200);
-	var DatePicker = __webpack_require__(298);
 
 	var PlayerSalaryTable = React.createClass({displayName: "PlayerSalaryTable",
 		getInitialState: function() {
 			return {
-				playerSalaryList: [],
-				estDate: Moment.utc().utcOffset('-0500').startOf('day')
+				playerSalaryList: []
 			};
 		},
 
@@ -19721,7 +19730,7 @@
 		},
 
 		componentDidMount: function () {
-			var estDateStartUnixTimestamp = this.state.estDate.unix();
+			var estDateStartUnixTimestamp = this.props.utcDate.unix();
 			var estDateStartUnixTimestamp = 1451520000;
 
 			ActionCreator.getPlayerSalaries({
@@ -19739,20 +19748,26 @@
 			Store.removeChangeListener(this.handleChange);
 		},
 
-		handleChange: function (event) {
-			// var newEstDate = Moment(event.target.selected).utc().utcOffset('-0500').startOf('day');
-			// var estDateStartUnixTimestamp = newEstDate.unix();
-
-			// ActionCreator.getPlayerSalaries({
-			// 	salary_min: 8000,
-			// 	start_unix_timestamp: estDateStartUnixTimestamp,
-			// 	end_unix_timestamp: estDateStartUnixTimestamp + 86400
-			// });
+		componentWillReceiveProps: function(nextProps) {
+			var estDateStartUnixTimestamp = 1451433600;
+		    ActionCreator.getPlayerSalaries({
+				salary_min: 8000,
+				unix_start_time: estDateStartUnixTimestamp,
+				unix_end_time: estDateStartUnixTimestamp + 86400
+			});
 
 			this.setState({
 			  playerSalaryList: Store.getPlayerSalaries(),
-			  // estDate: newEstDate
 			});
+		},
+
+		handleChange: function () {
+
+			this.setState({
+			  playerSalaryList: Store.getPlayerSalaries(),
+			});
+
+			console.log(this.state.playerSalaryList);
 		},
 
 		returnPlayerSalaryMap: function(playerSalaries) {
@@ -19806,10 +19821,6 @@
 
 			return (
 				React.createElement("div", null, 
-					React.createElement(DatePicker, {
-						selected: this.state.estDate, 
-						onChange: this.handleChange}
-					), 
 					React.createElement(Table, {
 						className: "table", 
 						data: playerSalaryList, 
@@ -22228,7 +22239,9 @@
 		getAllData: function(url) {
 			return this.getData(url).then(function(results) {
 				if (results.next == null) {
-					return this.allResults;
+					var returnedResults = this.allResults;
+					this.allResults = [];
+					return returnedResults;
 				} else {
 					for (var i = 0; i < results.results.length; i++) {
 						this.allResults.push(results.results[i]);

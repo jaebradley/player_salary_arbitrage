@@ -10,14 +10,11 @@ var Table = Reactable.Table;
 var Thead = Reactable.Thead;
 var Th = Reactable.Th;
 var Td = Reactable.Td;
-var Moment = require('moment');
-var DatePicker = require('react-datepicker');
 
 var PlayerSalaryTable = React.createClass({
 	getInitialState: function() {
 		return {
-			playerSalaryList: [],
-			estDate: Moment.utc().utcOffset('-0500').startOf('day')
+			playerSalaryList: []
 		};
 	},
 
@@ -26,7 +23,7 @@ var PlayerSalaryTable = React.createClass({
 	},
 
 	componentDidMount: function () {
-		var estDateStartUnixTimestamp = this.state.estDate.unix();
+		var estDateStartUnixTimestamp = this.props.utcDate.unix();
 		var estDateStartUnixTimestamp = 1451520000;
 
 		ActionCreator.getPlayerSalaries({
@@ -44,20 +41,26 @@ var PlayerSalaryTable = React.createClass({
 		Store.removeChangeListener(this.handleChange);
 	},
 
-	handleChange: function (event) {
-		// var newEstDate = Moment(event.target.selected).utc().utcOffset('-0500').startOf('day');
-		// var estDateStartUnixTimestamp = newEstDate.unix();
-
-		// ActionCreator.getPlayerSalaries({
-		// 	salary_min: 8000,
-		// 	start_unix_timestamp: estDateStartUnixTimestamp,
-		// 	end_unix_timestamp: estDateStartUnixTimestamp + 86400
-		// });
+	componentWillReceiveProps: function(nextProps) {
+		var estDateStartUnixTimestamp = 1451433600;
+	    ActionCreator.getPlayerSalaries({
+			salary_min: 8000,
+			unix_start_time: estDateStartUnixTimestamp,
+			unix_end_time: estDateStartUnixTimestamp + 86400
+		});
 
 		this.setState({
 		  playerSalaryList: Store.getPlayerSalaries(),
-		  // estDate: newEstDate
 		});
+	},
+
+	handleChange: function () {
+
+		this.setState({
+		  playerSalaryList: Store.getPlayerSalaries(),
+		});
+
+		console.log(this.state.playerSalaryList);
 	},
 
 	returnPlayerSalaryMap: function(playerSalaries) {
@@ -111,10 +114,6 @@ var PlayerSalaryTable = React.createClass({
 
 		return (
 			<div>
-				<DatePicker
-					selected={this.state.estDate}
-					onChange={this.handleChange}
-				/>
 				<Table 
 					className="table" 
 					data={playerSalaryList} 

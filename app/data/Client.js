@@ -25,7 +25,9 @@ var Client = {
 	getAllData: function(url) {
 		return this.getData(url).then(function(results) {
 			if (results.next == null) {
-				return this.allResults;
+				var returnedResults = this.allResults;
+				this.allResults = [];
+				return returnedResults;
 			} else {
 				for (var i = 0; i < results.results.length; i++) {
 					this.allResults.push(results.results[i]);
