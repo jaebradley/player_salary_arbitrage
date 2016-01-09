@@ -4,12 +4,12 @@ var React = require('react');
 var PlayerSalaryTableRow = require('./PlayerSalaryTableRow');
 var Store = require('../stores/Store');
 var ActionCreator = require('../actions/ActionCreator');
-var HashMap = require('hashmap');
 var Reactable = require('reactable');
 var Table = Reactable.Table;
 var Thead = Reactable.Thead;
 var Th = Reactable.Th;
 var Td = Reactable.Td;
+var PlayerSalaryMapper = require('../utils/PlayerSalaryMapper');
 
 var PlayerSalaryTable = React.createClass({
 	getInitialState: function() {
@@ -96,7 +96,7 @@ var PlayerSalaryTable = React.createClass({
 	render: function() {
 		var playerSalaryList = [];
 		if (this.state.playerSalaryList.length > 0) {
-			var playerSalaryMap = this.returnPlayerSalaryMap(this.state.playerSalaryList);
+			var playerSalaryMap = PlayerSalaryMapper.mapPlayerSalaries(this.state.playerSalaryList);
 			playerSalaryMap.forEach(function(value, key) {
 				keyValues = key.split("|");
 				var data = 
