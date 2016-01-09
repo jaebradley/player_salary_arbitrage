@@ -27,11 +27,14 @@ var PlayerSalaryTable = React.createClass({
 
 	componentDidMount: function () {
 		var estDateStartUnixTimestamp = this.state.estDate.unix();
+		var estDateStartUnixTimestamp = 1451520000;
+
 		ActionCreator.getPlayerSalaries({
 			salary_min: 8000,
-			start_unix_timestamp: estDateStartUnixTimestamp,
-			end_unix_timestamp: estDateStartUnixTimestamp + 86400
+			unix_start_time: estDateStartUnixTimestamp,
+			unix_end_time: estDateStartUnixTimestamp + 86400
 		});
+
 		this.setState({
 		  playerSalaryList: Store.getPlayerSalaries()
 		});
@@ -42,18 +45,18 @@ var PlayerSalaryTable = React.createClass({
 	},
 
 	handleChange: function (event) {
-		var newEstDate = Moment(event.target.selected).utc().utcOffset('-0500').startOf('day');
-		var estDateStartUnixTimestamp = newEstDate.unix();
+		// var newEstDate = Moment(event.target.selected).utc().utcOffset('-0500').startOf('day');
+		// var estDateStartUnixTimestamp = newEstDate.unix();
 
-		ActionCreator.getPlayerSalaries({
-			salary_min: 8000,
-			start_unix_timestamp: estDateStartUnixTimestamp,
-			end_unix_timestamp: estDateStartUnixTimestamp + 86400
-		});
+		// ActionCreator.getPlayerSalaries({
+		// 	salary_min: 8000,
+		// 	start_unix_timestamp: estDateStartUnixTimestamp,
+		// 	end_unix_timestamp: estDateStartUnixTimestamp + 86400
+		// });
 
 		this.setState({
 		  playerSalaryList: Store.getPlayerSalaries(),
-		  estDate: newEstDate
+		  // estDate: newEstDate
 		});
 	},
 
@@ -109,9 +112,9 @@ var PlayerSalaryTable = React.createClass({
 		return (
 			<div>
 				<DatePicker
-				    selected={this.state.estDate}
-				    onChange={this.handleChange} 
-			    />
+					selected={this.state.estDate}
+					onChange={this.handleChange}
+				/>
 				<Table 
 					className="table" 
 					data={playerSalaryList} 
