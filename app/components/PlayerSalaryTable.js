@@ -23,13 +23,12 @@ var PlayerSalaryTable = React.createClass({
 	},
 
 	componentDidMount: function () {
-		var estDateStartUnixTimestamp = this.props.utcDate.unix();
-		var estDateStartUnixTimestamp = 1451520000;
+		var timestamp = this.props.utcDate.unix() - 18000;
 
 		ActionCreator.getPlayerSalaries({
 			salary_min: 8000,
-			unix_start_time: estDateStartUnixTimestamp,
-			unix_end_time: estDateStartUnixTimestamp + 86400
+			unix_start_time: timestamp,
+			unix_end_time: timestamp + 86400
 		});
 
 		this.setState({
@@ -42,11 +41,12 @@ var PlayerSalaryTable = React.createClass({
 	},
 
 	componentWillReceiveProps: function(nextProps) {
-		var estDateStartUnixTimestamp = 1451433600;
+		var timestamp = this.props.utcDate.unix() - 18000;
+
 	    ActionCreator.getPlayerSalaries({
 			salary_min: 8000,
-			unix_start_time: estDateStartUnixTimestamp,
-			unix_end_time: estDateStartUnixTimestamp + 86400
+			unix_start_time: timestamp,
+			unix_end_time: timestamp + 86400
 		});
 
 		this.setState({
@@ -55,41 +55,9 @@ var PlayerSalaryTable = React.createClass({
 	},
 
 	handleChange: function () {
-
 		this.setState({
 		  playerSalaryList: Store.getPlayerSalaries(),
 		});
-
-		console.log(this.state.playerSalaryList);
-	},
-
-	returnPlayerSalaryMap: function(playerSalaries) {
-		var playerSalaryMap = new HashMap();
-		playerSalaries.forEach(function(playerSalary) {
-			var key = playerSalary.player.first_name + "|" + playerSalary.player.last_name + "|" + playerSalary.game.start_time + "|" + playerSalary.player.team.abbreviation;
-			if (!playerSalaryMap.has(key)) {
-				playerSalaryMap.set(
-					key,
-					{
-						draftKingsSalary: null,
-						fanDuelSalary: null
-					}
-				);
-			};
-			var value = playerSalaryMap.get(key);
-			switch(playerSalary.site.name) {
-				case "DraftKings":
-					value.draftKingsSalary = playerSalary.salary;
-					break;
-				case "FanDuel":
-					value.fanDuelSalary = playerSalary.salary;
-					break;
-				default:
-					return true;
-			}
-			playerSalaryMap.set(key, value);
-		});
-		return playerSalaryMap;
 	},
 
 

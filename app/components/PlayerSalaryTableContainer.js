@@ -19,14 +19,19 @@ var PlayerSalaryTableContainer = React.createClass({
 	},
 
 	render: function() {
+		var datePickerStyle = {
+			width: "15%"
+		};
 
 		return (
 			<div>
-				<h3 className="text-center">Player Salary Differential</h3>
-				<DatePicker
-					selected={this.state.utcDate}
-					onChange={this.handleDateSelection}
-				/>
+				<div className="date-selection">
+					<DatePicker
+						style={datePickerStyle}
+						selected={this.state.utcDate}
+						onChange={this.handleDateSelection}
+					/>
+				</div>
 				<PlayerSalaryTable 
 					utcDate={this.state.utcDate}
 				/>
