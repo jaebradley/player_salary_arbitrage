@@ -19676,8 +19676,6 @@
 		},
 
 		handleDateSelection: function (date) {
-			console.log(date.utc().utcOffset(-5).startOf('day'));
-
 			this.setState({
 			  estDate: date.utc().utcOffset(-5).startOf('day')
 			});
@@ -19739,7 +19737,6 @@
 			var timestamp = this.props.estDate.unix();
 
 			ActionCreator.getPlayerSalaries({
-				salary_min: 8000,
 				unix_start_time: timestamp,
 				unix_end_time: timestamp + 86400
 			});
@@ -19755,10 +19752,8 @@
 
 		componentWillReceiveProps: function(nextProps) {
 			var timestamp = nextProps.estDate.unix();
-			console.log(timestamp);
 
 		    ActionCreator.getPlayerSalaries({
-				salary_min: 8000,
 				unix_start_time: timestamp,
 				unix_end_time: timestamp + 86400
 			});

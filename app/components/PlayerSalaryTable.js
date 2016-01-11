@@ -26,7 +26,6 @@ var PlayerSalaryTable = React.createClass({
 		var timestamp = this.props.estDate.unix();
 
 		ActionCreator.getPlayerSalaries({
-			salary_min: 8000,
 			unix_start_time: timestamp,
 			unix_end_time: timestamp + 86400
 		});
@@ -44,7 +43,6 @@ var PlayerSalaryTable = React.createClass({
 		var timestamp = nextProps.estDate.unix();
 
 	    ActionCreator.getPlayerSalaries({
-			salary_min: 8000,
 			unix_start_time: timestamp,
 			unix_end_time: timestamp + 86400
 		});
