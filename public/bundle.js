@@ -19671,14 +19671,15 @@
 		getInitialState: function() {
 
 			return {
-				utcDate: Moment.utc()
+				estDate: Moment.utc().utcOffset(-5).startOf('day')
 			};
 		},
 
 		handleDateSelection: function (date) {
+			console.log(date.utc().utcOffset(-5).startOf('day'));
 
 			this.setState({
-			  utcDate: date
+			  estDate: date.utc().utcOffset(-5).startOf('day')
 			});
 		},
 
@@ -19692,12 +19693,12 @@
 					React.createElement("div", {className: "date-selection"}, 
 						React.createElement(DatePicker, {
 							style: datePickerStyle, 
-							selected: this.state.utcDate, 
+							selected: this.state.estDate, 
 							onChange: this.handleDateSelection}
 						)
 					), 
 					React.createElement(PlayerSalaryTable, {
-						utcDate: this.state.utcDate}
+						estDate: this.state.estDate}
 					)
 				)
 			);
@@ -19735,7 +19736,7 @@
 		},
 
 		componentDidMount: function () {
-			var timestamp = this.props.utcDate.unix() - 18000;
+			var timestamp = this.props.estDate.unix();
 
 			ActionCreator.getPlayerSalaries({
 				salary_min: 8000,
@@ -19753,7 +19754,8 @@
 		},
 
 		componentWillReceiveProps: function(nextProps) {
-			var timestamp = this.props.utcDate.unix() - 18000;
+			var timestamp = nextProps.estDate.unix();
+			console.log(timestamp);
 
 		    ActionCreator.getPlayerSalaries({
 				salary_min: 8000,
@@ -22160,7 +22162,6 @@
 	var ActionCreator = {
 		getPlayerSalaries: function (data) {
 			var url = this.appendDataToUrl('https://nba-persistence.herokuapp.com/player_salaries/', data);
-			var url = "https://nba-persistence.herokuapp.com/player_salaries/?salary_min=8000";
 			Client
 				.getAllData(url)
 				.then(function (playerSalaries) {

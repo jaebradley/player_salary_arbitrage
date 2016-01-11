@@ -7,14 +7,13 @@ var PlayerSalaryTableContainer = React.createClass({
 	getInitialState: function() {
 
 		return {
-			utcDate: Moment.utc()
+			estDate: Moment.utc().utcOffset(-5).startOf('day')
 		};
 	},
 
 	handleDateSelection: function (date) {
-
 		this.setState({
-		  utcDate: date
+		  estDate: date.utc().utcOffset(-5).startOf('day')
 		});
 	},
 
@@ -28,12 +27,12 @@ var PlayerSalaryTableContainer = React.createClass({
 				<div className="date-selection">
 					<DatePicker
 						style={datePickerStyle}
-						selected={this.state.utcDate}
+						selected={this.state.estDate}
 						onChange={this.handleDateSelection}
 					/>
 				</div>
 				<PlayerSalaryTable 
-					utcDate={this.state.utcDate}
+					estDate={this.state.estDate}
 				/>
 			</div>
 		);

@@ -1,8 +1,3 @@
-body {
-    /*background-image: url("https://dailyfantasybootcamp.com/wp-content/uploads/2015/10/Pc0modt.jpg");
-    background-size: contain;*/
-}
-
 .image-container {
     position: relative;
     width:100%;
@@ -15,7 +10,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url("https://dailyfantasybootcamp.com/wp-content/uploads/2015/10/Pc0modt.jpg");
+    background-image: url("/static/images/teams.jpg");
     background-size: contain;
     width: 100%;
     height: 100%;
