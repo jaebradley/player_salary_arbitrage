@@ -94,6 +94,13 @@ var PlayerSalaryTable = React.createClass({
 					filterable={[
 						"Name"
 					]}
+					itemsPerPage={20} pageButtonLimit={5}
+					defaultSort={
+						{
+							"column": "Difference (DK - FD)",
+							"direction": "desc"
+						}
+					}
 				/>
 			</div>
 		);

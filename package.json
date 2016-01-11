@@ -36,7 +36,8 @@
     "reactable": "^0.12.1",
     "react-dom": "latest",
     "moment": "^2.11.0",
-    "react-datepicker": "^0.18.0"
+    "react-datepicker": "^0.18.0",
+    "react-loading": "^0.0.7"
   },
   "devDependencies": {
     "jsx-loader": "^0.12.2",
